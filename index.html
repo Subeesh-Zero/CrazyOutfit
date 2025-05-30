@@ -3,157 +3,190 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crazy Outfit - E-commerce</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Modern E-Commerce Store</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
+        /* ========== Modern Styles ========== */
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             background-color: #f8f9fa;
         }
-        /* Hero Section */
-        .hero-section {
-            background: url('https://lh3.googleusercontent.com/d/15YPjZ-WCOvD8fIgbgoyqJPaRFbqGXkKh');
-            background-size: cover;
-            background-position: center;
-            height: 60vh;
-            margin-bottom: 40px;
-        }
-        /* Navbar */
+
+        /* Navbar Styling */
         .navbar {
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            background-color: #fff;
+            padding: 0.8rem 1rem;
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
+
         .navbar-brand {
             font-weight: 700;
-            font-size: 1.8rem;
-            color: #000 !important;
+            letter-spacing: -0.5px;
+            color: #fff !important;
         }
-        .navbar-nav .nav-link {
-            color: #000 !important;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-        .navbar-nav .nav-link:hover, .navbar-nav .nav-link.active {
-            color: #007bff !important;
-        }
-        /* Search Bar */
-        .search-filter-container {
-            margin: 1rem auto;
-            max-width: 600px;
-            display: flex;
-            align-items: center;
-            background: #fff;
+
+        /* Enhanced Select Dropdown */
+        .form-select {
+            width: 220px;
+            height: 44px;
             border-radius: 30px;
+            padding: 10px 20px;
+            font-size: 15px;
             border: 2px solid #e0e0e0;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            padding: 5px 10px;
-            transition: all 0.3s ease;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23666" width="18" height="18"><path d="M7 10l5 5 5-5z"/></svg>');
+            background-position: right 15px center;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .search-filter-container:hover, .search-filter-container:focus-within {
-            border-color: #007bff;
-            box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+
+        .form-select:hover {
+            border-color: #4dabf7;
+            box-shadow: 0 2px 8px rgba(77, 171, 247, 0.2);
         }
-        .search-filter-container .fa-search {
-            color: #555;
-            font-size: 1.2rem;
-            margin: 0 10px;
+
+        .form-select:focus {
+            border-color: #228be6;
+            box-shadow: 0 0 0 3px rgba(34, 139, 230, 0.15);
         }
-        .search-filter-container .form-control {
-            border: none;
-            box-shadow: none;
-            font-size: 1rem;
-            padding: 10px;
-            flex: 1;
+
+        /* Modern Search Bar */
+        .form-control {
+            height: 44px;
+            border-radius: 30px;
+            padding: 10px 20px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.2s ease;
         }
-        .search-filter-container .form-control:focus {
-            outline: none;
-            background: transparent;
+
+        .form-control:focus {
+            border-color: #228be6;
+            box-shadow: 0 0 0 3px rgba(34, 139, 230, 0.15);
         }
-        .search-filter-container .form-control::placeholder {
-            color: #999;
-        }
-        .search-filter-container .btn-search {
-            background-color: #007bff;
-            color: white;
-            border-radius: 25px;
-            padding: 8px 20px;
-            font-size: 1rem;
-            border: none;
-            transition: background-color 0.3s ease;
-        }
-        .search-filter-container .btn-search:hover {
-            background-color: #0056b3;
-        }
-        /* Product Card */
-        .product-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: none;
-            border-radius: 10px;
+
+        /* Banner Slider */
+        .banner-slider {
+            position: relative;
+            width: 100%;
+            height: 400px;
             overflow: hidden;
-            background: white;
+            border-radius: 12px;
+            margin-bottom: 2rem;
         }
+
+        .banner-slider img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .banner-slider img.active {
+            opacity: 1;
+        }
+
+        /* Navigation Buttons */
+        .slider-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 24px;
+            cursor: pointer;
+            border-radius: 50%;
+            transition: background 0.3s ease;
+        }
+
+        .slider-btn:hover {
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .slider-btn.prev {
+            left: 15px;
+        }
+
+        .slider-btn.next {
+            right: 15px;
+        }
+
+        /* Product Cards */
+        .product-card {
+            border: none;
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
         .product-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
+
         .product-card img {
-            height: 200px;
+            height: 200px; /* Adjusted for mobile */
             object-fit: cover;
-            border-bottom: 1px solid #e9ecef;
+            border-radius: 12px 12px 0 0;
         }
-        .product-card .card-body {
-            padding: 20px;
+
+        .card-body {
+            padding: 1rem; /* Adjusted for mobile */
         }
-        .product-card .card-title {
-            font-size: 1.2rem;
+
+        .card-title {
             font-weight: 600;
-            margin-bottom: 10px;
+            color: #2c3e50;
+            margin-bottom: 0.5rem; /* Adjusted for mobile */
+            font-size: 1rem; /* Adjusted for mobile */
         }
-        .product-card .card-text {
-            color: #555;
-            font-size: 1rem;
-        }
-        .product-card .price {
-            font-size: 1.3rem;
+
+        .card-text {
+            font-size: 1rem; /* Adjusted for mobile */
+            color: #e74c3c;
             font-weight: 700;
-            color: #28a745;
         }
+
+        /* View Product Button */
         .view-product-btn {
-            background-color: #007bff;
-            border: none;
-            transition: background-color 0.3s ease;
             width: 100%;
             padding: 10px;
-            border-radius: 8px;
+            background: linear-gradient(135deg, #2c3e50, #3498db);
             color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease;
         }
+
         .view-product-btn:hover {
-            background-color: #0056b3;
+            background: linear-gradient(135deg, #3498db, #2c3e50);
         }
-        /* No Products Found */
+
+        /* No Products Found Message */
         .no-products {
             text-align: center;
             font-size: 1.2rem;
             color: #666;
             margin-top: 2rem;
         }
-        /* Load More Button */
-        .load-more-btn {
-            display: block;
-            margin: 2rem auto;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
+
+        /* Search and Filter Container */
+        .search-filter-container {
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
         }
-        .load-more-btn:hover {
-            background-color: #0056b3;
-        }
+
         /* Loading Overlay */
         .loading-overlay {
             position: fixed;
@@ -167,99 +200,86 @@
             align-items: center;
             z-index: 1000;
         }
+
         .loading-overlay .spinner-border {
             width: 3rem;
             height: 3rem;
         }
-        /* Footer */
-        footer {
-            background-color: #212529;
-            color: white;
-            padding: 20px 0;
-            margin-top: 40px;
-        }
-        footer a {
-            color: #adb5bd;
-            text-decoration: none;
-        }
-        footer a:hover {
-            color: white;
-        }
-        footer .social-icons a {
-            color: #adb5bd;
-            font-size: 1.5rem;
-            margin: 0 10px;
-        }
-        footer .social-icons a:hover {
-            color: white;
-        }
-        /* Responsive Adjustments */
+
+        /* Responsive Design */
         @media (max-width: 767.98px) {
-            .hero-section {
-                height: 40vh;
+            .navbar-collapse {
+                padding-top: 1rem;
             }
+            
+            .form-select {
+                width: 100%;
+                margin: 0.5rem 0;
+            }
+
+            .form-control {
+                width: 100% !important;
+                margin-top: 0.5rem;
+            }
+
             .col-md-4 {
-                flex: 0 0 50%;
+                flex: 0 0 50%; /* 2 cards per row on mobile */
                 max-width: 50%;
             }
+
             .product-card img {
-                height: 150px;
+                height: 150px; /* Adjusted for mobile */
             }
-            .product-card .card-body {
-                padding: 15px;
+
+            .card-body {
+                padding: 0.75rem; /* Adjusted for mobile */
             }
+
             .card-title {
-                font-size: 1rem;
+                font-size: 0.9rem; /* Adjusted for mobile */
             }
-            .card-text, .price {
-                font-size: 0.9rem;
+
+            .card-text {
+                font-size: 0.9rem; /* Adjusted for mobile */
             }
+
+            .banner-slider {
+                height: 200px; /* Adjusted for mobile */
+            }
+
+            .slider-btn {
+                padding: 8px 12px;
+                font-size: 18px;
+            }
+
             .search-filter-container {
-                flex-direction: row;
-                padding: 5px;
-                margin: 1rem;
-                height: 40px; /* Decreased height for mobile */
-                align-items: center;
-            }
-            .search-filter-container .fa-search {
-                margin: 0 8px;
-                font-size: 1rem;
-            }
-            .search-filter-container .form-control {
-                width: 100%;
-                margin: 0;
-                padding: 5px;
-                font-size: 0.9rem;
-            }
-            .search-filter-container .btn-search {
-                display: none; /* Hide search button in mobile view */
+                flex-direction: column;
+                align-items: stretch;
             }
         }
+
         @media (min-width: 768px) and (max-width: 991.98px) {
             .col-md-4 {
-                flex: 0 0 50%;
+                flex: 0 0 50%; /* 2 cards per row on tablets */
                 max-width: 50%;
             }
-            .search-filter-container {
-                padding: 8px;
-            }
-            .search-filter-container .form-control {
-                font-size: 0.95rem;
-            }
-            .search-filter-container .btn-search {
-                padding: 6px 15px;
-                font-size: 0.95rem;
-            }
         }
+
         @media (min-width: 992px) {
             .col-md-4 {
-                flex: 0 0 33.33%;
+                flex: 0 0 33.33%; /* 3 cards per row on desktop */
                 max-width: 33.33%;
+            }
+
+            /* Align sheet selector to the right on desktop */
+            .navbar-nav.ms-auto {
+                margin-left: auto !important;
             }
         }
     </style>
 </head>
 <body>
+
     <!-- Loading Overlay -->
     <div class="loading-overlay">
         <div class="spinner-border text-primary" role="status">
@@ -268,74 +288,82 @@
     </div>
 
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light">
+    <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Crazy Outfit</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <a class="navbar-brand" href="#">TechShop</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0" id="sheetNav"></ul>
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0"> <!-- ms-auto to align right -->
+                    <li class="nav-item">
+                        <select id="sheetSelector" class="form-select">
+                            <option value="ddd">Loading...</option>
+                        </select>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="hero-section"></section>
-
-    <!-- Products Section with Title Above Search -->
-    <section id="products" class="container my-5">
-        <h2 class="text-center mb-4">Welcome</h2>
-        <div class="search-filter-container">
-            <i class="fas fa-search"></i>
-            <input type="text" id="search" class="form-control" placeholder="Search..">
-            <button class="btn-search">Search</button>
+    <!-- Banner Slider -->
+    <div class="container mt-4">
+        <div class="banner-slider">
+            <img src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Banner 1" class="active">
+            <img src="https://media.istockphoto.com/id/1031430214/photo/young-woman-kayaking-through-the-backwaters-of-monroe-island.jpg?s=1024x1024&w=is&k=20&c=_oF7GgQFtH5p9gNGehfQmJh70rjKYAX-OODPFj6F8M4=" alt="Banner 2">
+            <img src="https://media.istockphoto.com/id/1065043970/photo/young-woman-sitting-on-edge-looks-out-at-view.jpg?s=1024x1024&w=is&k=20&c=mzH_43j5cMciy1zU6YpZXwWZT3lZ-LSJX5MqRUH2m1g=" alt="Banner 3">
+            <img src="https://media.istockphoto.com/id/954560222/photo/black-white-tiger.jpg?s=1024x1024&w=is&k=20&c=TYtUo0EjHIMJN3ao_DFCFHDwOf7yw-JWzgoxqtwlE3E=" alt="Banner 4">
+            <img src="https://media.istockphoto.com/id/814423752/photo/eye-of-model-with-colorful-art-make-up-close-up.jpg?s=1024x1024&w=is&k=20&c=NQtm4v1Uzp2luv-6f3qORcq9pDtz2H56p8g9Xix8cY0=" alt="Banner 5">
+            <!-- Navigation Buttons -->
+            <button class="slider-btn prev" onclick="prevBanner()">❮</button>
+            <button class="slider-btn next" onclick="nextBanner()">❯</button>
         </div>
+    </div>
+
+    <!-- Search and Filter Container -->
+    <div class="container search-filter-container">
+        <input type="text" id="search" class="form-control" placeholder="Search products...">
+    </div>
+
+    <!-- Product List -->
+    <div class="container mt-4">
         <div id="product-list" class="row g-4"></div>
-        <button id="load-more-btn" class="load-more-btn">View More</button>
-    </section>
+    </div>
 
-    <!-- Footer -->
-    <footer class="text-center">
-        <div class="container">
-            <div class="social-icons">
-                <a href="https://www.instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
-                <a href="https://www.whatsapp.com" target="_blank"><i class="fab fa-whatsapp"></i></a>
-                <a href="https://www.youtube.com" target="_blank"><i class="fab fa-youtube"></i></a>
-                <a href="https://www.linkedin.com" target="_blank"><i class="fab fa-linkedin"></i></a>
-            </div>
-            <p class="mb-2">© 2025 Crazy Outfit. All rights reserved.</p>
-            <p>
-                <a href="#">Privacy Policy</a> | 
-                <a href="#">Terms of Service</a> | 
-                <a href="#">Contact Us</a>
-            </p>
-        </div>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        const API_URL = "https://script.google.com/macros/s/AKfycbzLLA8pa8Yu4EB6QK4JLeYCNYSB_bjt5YoiCOvoXFgdV1sDLiR2Sm3KhR3qblTFPQir/exec";
+        const API_URL = "https://script.google.com/macros/s/AKfycbwlU0Hq3W1UFAbLCs3LK75aIkRXbzykJh0snshpLGvdW4UlSFVA9WVd98zeTbv4z3zS/exec";
         let allProducts = [];
-        let visibleProducts = 12;
-        let currentSheet = "";
 
+        // Banner Slider Logic
+        const bannerSlider = document.querySelector('.banner-slider');
+        const bannerImages = bannerSlider.querySelectorAll('img');
+        let currentBannerIndex = 0;
+
+        function showBanner(index) {
+            bannerImages[currentBannerIndex].classList.remove('active');
+            currentBannerIndex = (index + bannerImages.length) % bannerImages.length;
+            bannerImages[currentBannerIndex].classList.add('active');
+        }
+
+        function nextBanner() {
+            showBanner(currentBannerIndex + 1);
+        }
+
+        function prevBanner() {
+            showBanner(currentBannerIndex - 1);
+        }
+
+        setInterval(nextBanner, 5000); // Change banner every 5 seconds
+
+        // Fetch Sheets and Products
         function fetchSheets() {
             fetch(`${API_URL}?action=getSheets`)
                 .then(response => response.json())
                 .then(sheets => {
-                    let sheetNav = $("#sheetNav");
-                    sheetNav.empty();
-                    sheets.forEach(sheet => {
-                        sheetNav.append(`
-                            <li class="nav-item">
-                                <a class="nav-link" href="#" data-sheet="${sheet}">${sheet}</a>
-                            </li>
-                        `);
-                    });
-                    currentSheet = sheets[0];
-                    fetchProducts(currentSheet);
-                    $(".nav-link").first().addClass("active");
+                    let selector = $("#sheetSelector");
+                    selector.empty();
+                    sheets.forEach(sheet => selector.append(`<option value="${sheet}">${sheet}</option>`));
+                    fetchProducts(sheets[0]);
                 });
         }
 
@@ -344,9 +372,9 @@
                 .then(response => response.json())
                 .then(products => {
                     allProducts = products;
-                    renderProducts(products.slice(0, visibleProducts), sheetName);
+                    renderProducts(products, sheetName);
+                    // Hide the loading overlay after content is loaded
                     $(".loading-overlay").hide();
-                    toggleLoadMoreButton(products.length);
                 })
                 .catch(error => {
                     console.error("Error fetching products:", error);
@@ -367,11 +395,10 @@
                     productList.append(`
                         <div class="col-md-4 product-item">
                             <div class="card product-card">
-                                <img src="${product.images[0] || 'https://via.placeholder.com/300'}" class="card-img-top">
+                                <img src="${product.images[0] || 'default.jpg'}" class="card-img-top">
                                 <div class="card-body">
                                     <h5 class="card-title">${product.title}</h5>
-                                    <p class="card-text">${product.description || 'No description available'}</p>
-                                    <p class="price">${product.price}:Rs</p>
+                                    <p class="card-text">$${product.price}</p>
                                     <button class="view-product-btn" onclick="openProduct('${sheetName}', ${product.id})">View Product</button>
                                 </div>
                             </div>
@@ -387,40 +414,21 @@
                 product.title.toLowerCase().includes(searchVal) || 
                 (product.keywords && product.keywords.toLowerCase().includes(searchVal))
             );
-            renderProducts(filteredProducts.slice(0, visibleProducts), currentSheet);
-            toggleLoadMoreButton(filteredProducts.length);
+            renderProducts(filteredProducts, $("#sheetSelector").val());
         }
 
         function openProduct(sheetName, productId) {
             window.location.href = `product.html?sheet=${sheetName}&id=${productId}`;
         }
 
-        $("#load-more-btn").click(() => {
-            visibleProducts += 12;
-            renderProducts(allProducts.slice(0, visibleProducts), currentSheet);
-            toggleLoadMoreButton(allProducts.length);
-        });
-
-        function toggleLoadMoreButton(totalProducts) {
-            if (visibleProducts >= totalProducts) {
-                $("#load-more-btn").hide();
-            } else {
-                $("#load-more-btn").show();
-            }
-        }
-
         $(document).ready(() => {
             fetchSheets();
-            $(document).on("click", ".nav-link", function (e) {
-                e.preventDefault();
-                currentSheet = $(this).data("sheet");
-                fetchProducts(currentSheet);
-                $(".nav-link").removeClass("active");
-                $(this).addClass("active");
-            });
+            $("#sheetSelector").change(() => fetchProducts($("#sheetSelector").val()));
             $("#search").on("input", searchProducts);
-            $(".btn-search").on("click", searchProducts);
         });
     </script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
