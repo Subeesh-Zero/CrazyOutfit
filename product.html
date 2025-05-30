@@ -3,148 +3,199 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crazy Outfit</title>
+    <title>Crazy Outfit - Product Details</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f8f9fa;
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f5f5;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            margin: 0;
         }
         .navbar {
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            background-color: #fff;
+            background-color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+            padding: 1rem 0;
         }
         .navbar-brand {
-            font-weight: 700;
-            font-size: 1.8rem;
-            color: #000 !important;
+            font-weight: 600;
+            font-size: 1.6rem;
+            color: #1a1a1a !important;
+            transition: color 0.3s ease;
+        }
+        .navbar-brand:hover {
+            color: #007bff !important;
         }
         .product-detail-container {
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-            padding: 2rem;
-            margin-top: 2rem;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            padding: 2.5rem;
+            margin: 2rem auto;
+            max-width: 1200px;
             flex: 1;
         }
+        .carousel {
+            background: #1a1a1a;
+            border-radius: 8px;
+            overflow: hidden;
+        }
         .carousel-item img {
-            max-height: 500px;
+            max-height: 600px;
             width: 100%;
-            object-fit: cover;
-            border-radius: 10px;
-            cursor: pointer;
+            object-fit: contain;
+            border-radius: 8px;
+            background: #1a1a1a;
+            padding: 1rem;
             transition: transform 0.3s ease;
         }
         .carousel-item img:hover {
-            transform: scale(1.02);
+            transform: scale(1.03);
         }
         .carousel-indicators [data-bs-target] {
-            background-color: rgba(0, 0, 0, 0.25);
-            width: 10px;
-            height: 10px;
+            background-color: #ffffff;
+            opacity: 0.5;
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
-            border: none;
-            margin: 0 6px;
+            margin: 0 8px;
+            transition: opacity 0.3s ease;
         }
         .carousel-indicators .active {
+            opacity: 1;
             background-color: #007bff;
         }
         .carousel-control-prev, .carousel-control-next {
-            width: 5%;
+            width: 8%;
+            background: rgba(0, 0, 0, 0.3);
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+        .carousel-control-prev:hover, .carousel-control-next:hover {
+            opacity: 1;
         }
         .product-info {
-            padding-left: 2.5rem;
+            padding: 2rem;
         }
         #productTitle {
             font-weight: 700;
-            color: #2c3e50;
+            color: #1a1a1a;
+            font-size: 2.2rem;
             margin-bottom: 1.5rem;
-            font-size: 2rem;
+            line-height: 1.3;
         }
         #productPrice {
-            color: #28a745;
-            font-weight: 700;
+            color: #2ecc71;
+            font-weight: 600;
             font-size: 2rem;
             margin-bottom: 1.5rem;
         }
         #productDescription {
-            color: #555;
-            line-height: 1.8;
+            color: #4a4a4a;
+            line-height: 1.7;
             font-size: 1.1rem;
             margin-bottom: 2rem;
         }
         #buyNowBtn {
-            padding: 12px 30px;
+            padding: 14px 32px;
             border-radius: 8px;
             font-weight: 600;
             font-size: 1.1rem;
             background-color: #007bff;
             border: none;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         #buyNowBtn:hover {
             background-color: #0056b3;
+            transform: translateY(-2px);
         }
         .related-products {
-            margin-top: 3rem;
+            margin: 3rem auto;
             padding: 2rem 0;
+            max-width: 1200px;
         }
         .related-products h2 {
             font-weight: 700;
-            color: #2c3e50;
+            color: #1a1a1a;
             margin-bottom: 2rem;
             text-align: center;
+            font-size: 1.8rem;
+            position: relative;
+        }
+        .related-products h2::after {
+            content: '';
+            width: 80px;
+            height: 3px;
+            background: #007bff;
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
         }
         .product-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.3s ease;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             overflow: hidden;
-            background: white;
+            background: #ffffff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
         .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            transform: translateY(-8px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
         }
         .product-card img {
-            height: 200px;
+            height: 250px;
             width: 100%;
-            object-fit: cover;
+            object-fit: contain;
+            background: #f5f5f5;
+            padding: 1rem;
             border-bottom: 1px solid #e9ecef;
         }
         .product-card .card-body {
-            padding: 20px;
+            padding: 1.5rem;
         }
         .product-card .card-title {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: 600;
-            margin-bottom: 10px;
+            margin-bottom: 0.75rem;
+            color: #1a1a1a;
+            line-height: 1.4;
         }
         .product-card .card-text {
             font-size: 1rem;
-            color: #555;
+            color: #4a4a4a;
+            margin-bottom: 1rem;
+            line-height: 1.6;
         }
         .product-card .price {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #28a745;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #2ecc71;
+            margin-bottom: 1rem;
         }
         .view-product-btn {
             background-color: #007bff;
             border: none;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             border-radius: 8px;
             color: white;
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 1rem;
         }
         .view-product-btn:hover {
             background-color: #0056b3;
+            transform: translateY(-2px);
         }
         .loading-spinner {
             display: flex;
@@ -155,35 +206,38 @@
             top: 0;
             left: 0;
             width: 100%;
-            background: rgba(255, 255, 255, 0.9);
-            z-index: 1000;
+            background: rgb(255, 255, 255);
+            z-index: 2000;
         }
         .spinner-border {
-            width: 3rem;
-            height: 3rem;
+            width: 3.5rem;
+            height: 3.5rem;
+            border-width: 0.4em;
         }
         footer {
-            background-color: #212529;
-            color: white;
-            padding: 20px 0;
+            background-color: #1a1a1a;
+            color: #ffffff;
+            padding: 2rem 0;
             margin-top: auto;
             text-align: center;
         }
         footer .social-icons a {
             color: #adb5bd;
-            font-size: 1.5rem;
-            margin: 0 10px;
+            font-size: 1.6rem;
+            margin: 0 12px;
             transition: color 0.3s ease;
         }
         footer .social-icons a:hover {
-            color: white;
+            color: #007bff;
         }
         footer a {
             color: #adb5bd;
             text-decoration: none;
+            margin: 0 12px;
+            font-size: 0.95rem;
         }
         footer a:hover {
-            color: white;
+            color: #007bff;
         }
         .modal-fullscreen .modal-dialog {
             margin: 0;
@@ -195,63 +249,80 @@
             height: 100%;
             border: none;
             border-radius: 0;
-            background-color: rgba(0, 0, 0, 0.9);
+            background-color: rgba(0, 0, 0, 0.95);
         }
         .modal-fullscreen .modal-body {
             display: flex;
             align-items: center;
             justify-content: center;
             height: 100%;
+            padding: 1rem;
         }
-        .modal-fullscreen img {
+        .modal-fullscreen .carousel {
+            width: 100%;
+            max-width: 1200px;
+            margin: auto;
+        }
+        .modal-fullscreen .carousel-item img {
             max-height: 90vh;
             max-width: 100%;
             object-fit: contain;
+            border-radius: 8px;
+            padding: 0;
+        }
+        .modal-fullscreen .carousel-control-prev, .modal-fullscreen .carousel-control-next {
+            width: 10%;
         }
         .close-modal {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            color: white;
+            top: 1.5rem;
+            right: 1.5rem;
+            color: #ffffff;
             font-size: 2rem;
             opacity: 0.8;
             background: none;
             border: none;
             z-index: 1050;
+            transition: opacity 0.3s ease;
         }
         .close-modal:hover {
             opacity: 1;
         }
-        @media (max-width: 767.98px) {
+        @media (max-width: 575.98px) {
             .product-detail-container {
-                padding: 1rem;
-                margin-top: 1rem;
+                padding: 1.2rem;
+                margin: 1rem;
             }
             .carousel-item img {
-                max-height: 300px;
+                max-height: 280px;
+                padding: 0.5rem;
             }
             .product-info {
-                padding-left: 0;
-                margin-top: 2rem;
+                padding: 1rem 0;
+                margin-top: 1.5rem;
             }
             #productTitle {
-                font-size: 1.5rem;
+                font-size: 1.6rem;
             }
             #productPrice {
                 font-size: 1.5rem;
             }
+            #productDescription {
+                font-size: 1rem;
+            }
             #buyNowBtn {
                 width: 100%;
-                padding: 15px;
+                padding: 12px;
+                font-size: 1rem;
             }
             .product-card img {
-                height: 150px;
+                height: 180px;
             }
             .product-card .card-body {
-                padding: 15px;
+                padding: 1rem;
             }
             .product-card .card-title {
-                font-size: 1rem;
+                font-size: 1.1rem;
             }
             .product-card .card-text, .product-card .price {
                 font-size: 0.9rem;
@@ -260,17 +331,107 @@
                 flex: 0 0 50%;
                 max-width: 50%;
             }
+            .related-products .col-md-4:nth-child(odd) {
+                animation: fadeIn 0.5s ease-in-out;
+            }
+            .related-products .col-md-4:nth-child(even) {
+                animation: fadeIn 0.5s ease-in-out 0.3s;
+            }
+            .related-products h2 {
+                font-size: 1.5rem;
+            }
+            .carousel-control-prev, .carousel-control-next {
+                width: 15%;
+            }
+            .modal-fullscreen .carousel-control-prev, .modal-fullscreen .carousel-control-next {
+                width: 20%;
+            }
         }
-        @media (min-width: 768px) and (max-width: 991.98px) {
-            .col-md-4 {
+        @media (min-width: 576px) and (max-width: 767.98px) {
+            .product-detail-container {
+                padding: 1.5rem;
+                margin: 1.5rem;
+            }
+            .carousel-item img {
+                max-height: 350px;
+            }
+            .product-info {
+                padding: 1.5rem 0;
+            }
+            #productTitle {
+                font-size: 1.8rem;
+            }
+            #productPrice {
+                font-size: 1.7rem;
+            }
+            #buyNowBtn {
+                width: 100%;
+                padding: 12px;
+            }
+            .product-card img {
+                height: 220px;
+            }
+            .product-card .card-body {
+                padding: 1.2rem;
+            }
+            .product-card .card-title {
+                font-size: 1.2rem;
+            }
+            .product-card .card-text, .product-card .price {
+                font-size: 0.95rem;
+            }
+            .related-products .col-md-4 {
                 flex: 0 0 50%;
                 max-width: 50%;
             }
+            .related-products h2 {
+                font-size: 1.6rem;
+            }
+        }
+        @media (min-width: 768px) and (max-width: 991.98px) {
+            .product-detail-container {
+                padding: 2rem;
+            }
+            .carousel-item img {
+                max-height: 450px;
+            }
+            .product-info {
+                padding: 1.5rem;
+            }
+            .product-card img {
+                height: 230px;
+            }
+            .product-card .card-body {
+                padding: 1.3rem;
+            }
+            .related-products .col-md-4 {
+                flex: 0 0 50%;
+                max-width: 50%;
+            }
+            .related-products h2 {
+                font-size: 1.7rem;
+            }
         }
         @media (min-width: 992px) {
-            .col-md-4 {
+            .product-card img {
+                height: 250px;
+            }
+            .related-products .col-md-4 {
                 flex: 0 0 33.33%;
                 max-width: 33.33%;
+            }
+            .carousel-item img {
+                max-height: 600px;
+            }
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
     </style>
@@ -291,7 +452,7 @@
     </nav>
 
     <!-- Product Details -->
-    <div class="constraints">
+    <div class="container">
         <div class="product-detail-container">
             <div class="row">
                 <div class="col-lg-6">
@@ -340,15 +501,24 @@
         </div>
     </footer>
 
-    <!-- Fullscreen Image Modal -->
+    <!-- Fullscreen Image Modal with Carousel -->
     <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
         <button type="button" class="close-modal" data-bs-dismiss="modal" aria-label="Close">
             <i class="fas fa-times"></i>
         </button>
         <div class="modal-dialog modal-fullscreen">
             <div class="modal-content">
-                <div class="modal-body text-center">
-                    <img id="fullscreenImage" src="" alt="Fullscreen Product Image" class="img-fluid">
+                <div class="modal-body">
+                    <div id="modalCarousel" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-indicators" id="modalCarouselIndicators"></div>
+                        <div class="carousel-inner" id="modalCarouselInner"></div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#modalCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#modalCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -360,6 +530,7 @@
         let currentProductId = null;
         let currentSheetName = null;
         let allProducts = [];
+        let productImages = [];
 
         function getQueryParam(param) {
             return new URLSearchParams(window.location.search).get(param);
@@ -377,37 +548,43 @@
                     $("#productDescription").text(product.description || 'No description available');
                     $("#buyNowBtn").attr("href", product.buyNow || '#');
 
+                    productImages = product.images && product.images.length > 0 ? product.images : ['https://via.placeholder.com/300'];
+
+                    // Main Carousel
                     let carouselInner = $(".carousel-inner").empty();
                     let carouselIndicators = $(".carousel-indicators").empty();
 
-                    if (product.images && product.images.length > 0) {
-                        product.images.forEach((img, index) => {
-                            carouselInner.append(`
-                                <div class="carousel-item ${index === 0 ? 'active' : ''}">
-                                    <img src="${img || 'https://via.placeholder.com/300'}" class="d-block w-100 product-image" data-index="${index}">
-                                </div>
-                            `);
-                            carouselIndicators.append(`
-                                <button type="button" data-bs-target="#productCarousel" data-bs-slide-to="${index}" 
-                                    class="${index === 0 ? 'active' : ''}" aria-label="Slide ${index + 1}"></button>
-                            `);
-                        });
-                    } else {
-                        // Fallback if no images are available
+                    productImages.forEach((img, index) => {
                         carouselInner.append(`
-                            <div class="carousel-item active">
-                                <img src="https://via.placeholder.com/300" class="d-block w-100 product-image" data-index="0">
+                            <div class="carousel-item ${index === 0 ? 'active' : ''}">
+                                <img src="${img}" class="d-block w-100 product-image" data-index="${index}">
                             </div>
                         `);
                         carouselIndicators.append(`
-                            <button type="button" data-bs-target="#productCarousel" data-bs-slide-to="0" 
-                                class="active" aria-label="Slide 1"></button>
+                            <button type="button" data-bs-target="#productCarousel" data-bs-slide-to="${index}" 
+                                    class="${index === 0 ? 'active' : ''}" aria-label="Slide ${index + 1}"></button>
                         `);
-                    }
+                    });
+
+                    // Modal Carousel
+                    let modalCarouselInner = $("#modalCarouselInner").empty();
+                    let modalCarouselIndicators = $("#modalCarouselIndicators").empty();
+
+                    productImages.forEach((img, index) => {
+                        modalCarouselInner.append(`
+                            <div class="carousel-item ${index === 0 ? 'active' : ''}">
+                                <img src="${img}" class="d-block w-100 product-image" data-index="${index}">
+                            </div>
+                        `);
+                        modalCarouselIndicators.append(`
+                            <button type="button" data-bs-target="#modalCarousel" data-bs-slide-to="${index}" 
+                                    class="${index === 0 ? 'active' : ''}" aria-label="Slide ${index + 1}"></button>
+                        `);
+                    });
 
                     $('.product-image').on('click', function() {
-                        const imgSrc = $(this).attr('src');
-                        $('#fullscreenImage').attr('src', imgSrc);
+                        const index = parseInt($(this).data('index'));
+                        $('#modalCarousel').carousel(index);
                         $('#imageModal').modal('show');
                     });
 
@@ -445,14 +622,20 @@
                 `);
             } else {
                 filteredProducts.forEach(product => {
+                    // Truncate title and description to 70 characters
+                    const title = product.title.length > 70 ? product.title.slice(0, 70) + '...' : product.title;
+                    const description = (product.description || 'No description available').length > 70 
+                        ? product.description.slice(0, 70) + '...' 
+                        : product.description || 'No description available';
+                    
                     relatedProducts.append(`
                         <div class="col-md-4">
                             <div class="card product-card">
                                 <img src="${product.images[0] || 'https://via.placeholder.com/300'}" class="card-img-top related-product-image" 
                                      data-fullimg="${product.images[0] || 'https://via.placeholder.com/300'}">
                                 <div class="card-body">
-                                    <h5 class="card-title">${product.title}</h5>
-                                    <p class="card-text">${product.description || 'No description available'}</p>
+                                    <h5 class="card-title">${title}</h5>
+                                    <p class="card-text">${description}</p>
                                     <p class="price">$${product.price}</p>
                                     <button class="view-product-btn" onclick="window.location.href='product.html?sheet=${currentSheetName}&id=${product.id}'">View Product</button>
                                 </div>
@@ -464,7 +647,12 @@
                 $('.related-product-image').on('click', function(e) {
                     if ($(e.target).hasClass('view-product-btn')) return;
                     const imgSrc = $(this).data('fullimg');
-                    $('#fullscreenImage').attr('src', imgSrc);
+                    $('#modalCarouselInner').empty().append(`
+                        <div class="carousel-item active">
+                            <img src="${imgSrc}" class="d-block w-100 product-image" data-index="0">
+                        </div>
+                    `);
+                    $('#modalCarouselIndicators').empty();
                     $('#imageModal').modal('show');
                 });
             }
