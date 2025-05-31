@@ -544,7 +544,7 @@
                 .then(response => response.json())
                 .then(product => {
                     $("#productTitle").text(product.title || 'No title available');
-                    $("#productPrice").text(`$${product.price || 'N/A'}`);
+                    $("#productPrice").text(`RS:${product.price || 'N/A'}`);
                     $("#productDescription").text(product.description || 'No description available');
                     $("#buyNowBtn").attr("href", product.buyNow || '#');
 
