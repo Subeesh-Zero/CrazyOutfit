@@ -46,6 +46,7 @@
         .logo {
             display: flex;
             align-items: center;
+            flex-grow: 0;
             z-index: 1002;
             transition: transform 0.3s ease;
         }
@@ -97,11 +98,7 @@
             }
         }
 
-        .menu-toggle {
-            display: none;
-        }
-
-        .selected-sheet {
+        .menu-toggle, .selected-sheet {
             display: none;
         }
 
@@ -139,6 +136,7 @@
             display: flex;
             align-items: center;
             position: relative;
+            flex-grow: 0;
             z-index: 1002;
         }
 
@@ -180,7 +178,7 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
             opacity: 0;
             z-index: 1003;
-            will-change: width, opacity;
+            will-change: translate;
         }
 
         .search-bar.active {
@@ -189,7 +187,7 @@
         }
 
         .search-bar input {
-            flex: 1;
+            flex-grow: 1;
             height: 100%;
             border: none;
             outline: none;
@@ -218,7 +216,7 @@
 
         .search-bar .close-btn:hover {
             background: #ff5252;
-            transform: rotate(90deg);
+            transform: rotate(-90deg);
         }
 
         .search-bar .close-btn i {
@@ -484,100 +482,46 @@
             }
 
             .logo h1 {
-                font-size: 2rem;
+                font-size: clamp(1.8rem, 3vw, 2rem);
             }
 
             .nav-menu {
                 display: block;
                 position: relative;
+                flex-grow: 0;
             }
 
             .nav-menu.active {
-                position: static;
-                top: auto;
-                width: auto;
-                padding: 0;
-                animation: none;
-            }
-
-            .menu-toggle {
-                text-decoration: none;
-                color: #000;
-                font-size: 17px;
-                font-weight: 500;
-                padding: 8px 16px;
-                border-radius: 8px;
-                transition: all 0.3s ease;
-                display: flex;
-                align-items: center;
-                cursor: pointer;
-            }
-
-            .menu-toggle:hover, .menu-toggle.active {
-                color: #007bff;
-                background: rgba(0, 123, 255, 0.1);
-            }
-
-            .menu-toggle::after, .active::after {
-                content: '';
-                position: absolute;
-                width: 0;
-                height: 2px;
-                bottom: 0;
-                left: 50%;
-                transform: translateX(-50%);
-                background: #007bff;
-                transition: width 0.3s ease;
-            }
-
-            .menu-toggle:hover::after, .menu-toggle.active::after {
-                width: 70%;
-            }
-
-            .menu-toggle i {
-                margin-left: 8px;
-            }
-
-            .selected-sheet {
-                display: inline;
-                font-size: 17px;
-                font-weight: 500;
-                color: #007bff;
-                margin-right: 8px;
+                position: fixed;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                padding: 20px 0;
+                animation: slideDown 0.4s ease forwards;
             }
 
             .nav-links {
-                font-size: 14px;
                 display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                background: rgba(255, 255, 0.95);
+                position: static;
+                background: rgba(255, 255, 255, 0.95);
                 padding: 10px 0;
-                border-radius: 8px;
                 box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-                min-width: 150px;
-                z-index: 1001;
             }
 
-            .nav-menu:hover .nav-links, .nav-links.active {
+            .nav-menu.active .nav-links {
                 display: block;
             }
 
             .nav-links a {
                 font-size: 16px;
-                text-align: left;
-            }
-
-            .hamburger {
-                display: none;
+                text-align: center;
             }
 
             .search-bar {
                 position: absolute;
                 top: 50%;
                 right: 60px;
-                transform: translate3d(0, -50%, 0);
+                transform: translateY(-50%);
             }
 
             .search-bar.active {
@@ -595,7 +539,7 @@
                 height: 40px;
             }
 
-            .search-icon i, .search-bar .close-btn {
+            .search-icon i, .search-bar .close-btn i {
                 font-size: 18px;
             }
 
@@ -609,14 +553,14 @@
             }
         }
 
-        /* Large Desktop (≥992px) */
+        /* Large Desktop (992px and up) */
         @media (min-width: 992px) {
             .navbar {
                 max-width: 1400px;
             }
 
             .search-bar.active {
-                width: 400px;
+                width: 450px;
             }
 
             #product-list {
@@ -668,10 +612,6 @@
             </div>
             
             <div class="nav-menu" id="navMenu">
-                <span class="selected-sheet" id="selectedSheet">Menu</span>
-                <a href="#" class="menu-toggle" id="menuToggle">
-                    <i class="fas fa-caret-down"></i>
-                </a>
                 <ul class="nav-links" id="navLinks">
                     <!-- Dynamically populated by JavaScript -->
                 </ul>
@@ -698,7 +638,7 @@
     <section class="hero-section"></section>
     <section id="products" class="container my-4">
         <h2 class="text-center mb-4"><span class="highlight-title">Welcome</span></h2>
-        <div id="product-list" class="row"></div>
+        <div id="product-list"></div>
         <button id="load-more-btn" class="load-more-btn">View More</button>
     </section>
     <footer class="text-center">
@@ -732,8 +672,6 @@
         const hamburger = document.getElementById('hamburger');
         const navMenu = document.getElementById('navMenu');
         const navLinks = document.getElementById('navLinks');
-        const menuToggle = document.getElementById('menuToggle');
-        const selectedSheet = document.getElementById('selectedSheet');
 
         // Debounce function to limit rapid toggling
         function debounce(func, wait) {
@@ -757,14 +695,13 @@
                 searchInput.focus();
                 navMenu.classList.remove('active');
                 hamburger.classList.remove('active');
-                navLinks.classList.remove('active');
             } else {
                 searchBar.classList.remove('active');
                 searchInput.blur();
             }
         }, 150);
 
-        // Function to toggle mobile menu
+        // Function to toggle menu
         function toggleNavMenu(e) {
             e.preventDefault();
             e.stopPropagation();
@@ -787,7 +724,7 @@
         hamburger.addEventListener('click', toggleNavMenu);
         hamburger.addEventListener('touchstart', toggleNavMenu);
 
-        // Close search bar and keyboard
+        // Close search bar
         closeSearch.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -812,9 +749,6 @@
                 navMenu.classList.remove('active');
                 hamburger.classList.remove('active');
             }
-            if (!navLinks.contains(e.target) && !menuToggle.contains(e.target) && navLinks.classList.contains('active')) {
-                navLinks.classList.remove('active');
-            }
         });
 
         document.addEventListener('touchstart', (e) => {
@@ -825,9 +759,6 @@
             if (!navMenu.contains(e.target) && !hamburger.contains(e.target) && navMenu.classList.contains('active')) {
                 navMenu.classList.remove('active');
                 hamburger.classList.remove('active');
-            }
-            if (!navLinks.contains(e.target) && !menuToggle.contains(e.target) && navLinks.classList.contains('active')) {
-                navLinks.classList.remove('active');
             }
         });
 
@@ -843,8 +774,6 @@
                         `);
                     });
                     currentSheet = sheets[0] || 'Home';
-                    selectedSheet.textContent = currentSheet;
-                    menuToggle.classList.add('active');
                     fetchProducts(currentSheet);
                     $("#navLinks a").first().addClass("active");
                 });
@@ -929,12 +858,9 @@
                 e.preventDefault();
                 e.stopPropagation();
                 currentSheet = $(this).data("sheet");
-                selectedSheet.textContent = currentSheet;
                 fetchProducts(currentSheet);
                 $(".nav-links a").removeClass("active");
                 $(this).addClass("active");
-                navLinks.classList.remove('active');
-                menuToggle.classList.add('active');
                 navMenu.classList.remove('active');
                 hamburger.classList.remove('active');
             });
