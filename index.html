@@ -181,7 +181,7 @@
             position: absolute;
             right: 60px;
             top: 50%;
-            transform: translateY(-50%);
+            transform: translate3d(0, -50%, 0); /* Use translate3d for GPU acceleration */
             width: 0;
             height: 45px;
             background: #ffffff;
@@ -189,10 +189,11 @@
             overflow: hidden;
             display: flex;
             align-items: center;
-            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            transition: width 0.3s ease-in-out, opacity 0.3s ease-in-out; /* Smoother transition */
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
             opacity: 0;
             z-index: 1003;
+            will-change: width, opacity; /* Optimize rendering */
         }
 
         .search-bar.active {
@@ -341,7 +342,7 @@
                 top: 80px;
                 right: 10px;
                 width: calc(100% - 20px);
-                z-index: 1003;
+                transform: translate3d(0, 0, 0); /* Adjust for mobile */
             }
         }
 
@@ -754,8 +755,21 @@
         const menuToggle = document.getElementById('menuToggle');
         const selectedSheet = document.getElementById('selectedSheet');
 
+        // Debounce function to limit rapid toggling
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
         // Function to toggle search bar
-        function toggleSearchBar(e) {
+        const toggleSearchBar = debounce((e) => {
             e.preventDefault();
             e.stopPropagation();
             if (!searchBar.classList.contains('active')) {
@@ -768,7 +782,7 @@
                 searchBar.classList.remove('active');
                 searchInput.blur();
             }
-        }
+        }, 100);
 
         // Function to toggle mobile menu
         function toggleNavMenu(e) {
@@ -931,14 +945,14 @@
 
         $(document).ready(() => {
             fetchSheets();
-            $(document).on("click", ".nav-links a", function (e) {
+            $(document).on("click", ".nav-links a", function(e) {
                 e.preventDefault();
                 e.stopPropagation();
                 currentSheet = $(this).data("sheet");
                 selectedSheet.textContent = currentSheet;
                 fetchProducts(currentSheet);
-                $(".nav-links a").removeClass("active");
-                $(this).addClass("active");
+                $(".nav-links a").removeClass('active');
+                $(this).addClass('active');
                 navLinks.classList.remove('active');
                 menuToggle.classList.add('active');
                 navMenu.classList.remove('active');
