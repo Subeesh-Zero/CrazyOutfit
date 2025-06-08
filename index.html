@@ -8,13 +8,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400;500&family=Noto+Sans+Devanagari:wght@400;500&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Roboto', 'Noto Sans Devanagari', sans-serif;
         }
 
         body {
@@ -46,17 +46,27 @@
             display: flex;
             align-items: center;
             z-index: 1002;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
         }
 
         .logo h1 {
+            font-family: 'Montserrat', sans-serif;
             color: #000;
-            font-size: 1.8rem;
+            font-size: 2rem;
             font-weight: 700;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.8px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            margin: 0;
         }
 
         .logo span {
+            font-family: 'Roboto', sans-serif;
             color: #007bff;
+            font-weight: 500;
         }
 
         .nav-menu {
@@ -181,7 +191,7 @@
             position: absolute;
             right: 60px;
             top: 50%;
-            transform: translate3d(0, -50%, 0); /* Use translate3d for GPU acceleration */
+            transform: translate3d(0, -50%, 0);
             width: 0;
             height: 45px;
             background: #ffffff;
@@ -189,11 +199,11 @@
             overflow: hidden;
             display: flex;
             align-items: center;
-            transition: width 0.3s ease-in-out, opacity 0.3s ease-in-out; /* Smoother transition */
+            transition: width 0.3s ease-in-out, opacity 0.3s ease-in-out;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
             opacity: 0;
             z-index: 1003;
-            will-change: width, opacity; /* Optimize rendering */
+            will-change: width, opacity;
         }
 
         .search-bar.active {
@@ -342,13 +352,13 @@
                 top: 80px;
                 right: 10px;
                 width: calc(100% - 20px);
-                transform: translate3d(0, 0, 0); /* Adjust for mobile */
+                transform: translate3d(0, 0, 0);
             }
         }
 
         @media (max-width: 480px) {
             .logo h1 {
-                font-size: 22px;
+                font-size: 1.6rem;
             }
 
             .search-bar.active {
@@ -371,7 +381,7 @@
 
         @media (max-width: 360px) {
             .logo h1 {
-                font-size: 20px;
+                font-size: 1.4rem;
             }
         }
 
@@ -381,7 +391,7 @@
             background-size: cover;
             background-position: center;
             height: 60vh;
-            margin-top: 70px; /* Aligns hero section directly below navbar */
+            margin-top: 70px;
             margin-bottom: 40px;
         }
 
@@ -412,6 +422,7 @@
         }
 
         .product-card .card-title {
+            font-family: 'Roboto', 'Noto Sans Devanagari', sans-serif;
             font-size: 1.2rem;
             font-weight: 600;
             margin-bottom: 8px;
@@ -419,6 +430,7 @@
         }
 
         .product-card .card-text {
+            font-family: 'Roboto', 'Noto Sans Devanagari', sans-serif;
             color: #666;
             font-size: 1rem;
             margin-bottom: 8px;
@@ -537,7 +549,7 @@
         @media (max-width: 575.98px) {
             .hero-section {
                 height: 40vh;
-                margin-top: 60px; /* Adjusted for smaller navbar height */
+                margin-top: 60px;
             }
 
             .col-md-4 {
@@ -594,7 +606,7 @@
         @media (min-width: 576px) and (max-width: 767.98px) {
             .hero-section {
                 height: 50vh;
-                margin-top: 65px; /* Adjusted for slightly smaller navbar */
+                margin-top: 65px;
             }
 
             .col-md-4 {
@@ -631,7 +643,7 @@
         @media (min-width: 768px) and (max-width: 991.98px) {
             .hero-section {
                 height: 55vh;
-                margin-top: 65px; /* Adjusted for consistency */
+                margin-top: 65px;
             }
 
             .col-md-4 {
@@ -656,7 +668,7 @@
         @media (min-width: 992px) {
             .hero-section {
                 height: 60vh;
-                margin-top: 70px; /* Matches navbar height */
+                margin-top: 70px;
             }
 
             .col-md-4 {
@@ -782,7 +794,7 @@
                 searchBar.classList.remove('active');
                 searchInput.blur();
             }
-        }, 100);
+        }, 150);
 
         // Function to toggle mobile menu
         function toggleNavMenu(e) {
@@ -945,14 +957,14 @@
 
         $(document).ready(() => {
             fetchSheets();
-            $(document).on("click", ".nav-links a", function(e) {
+            $(document).on("click", ".nav-links a", function (e) {
                 e.preventDefault();
                 e.stopPropagation();
                 currentSheet = $(this).data("sheet");
                 selectedSheet.textContent = currentSheet;
                 fetchProducts(currentSheet);
-                $(".nav-links a").removeClass('active');
-                $(this).addClass('active');
+                $(".nav-links a").removeClass("active");
+                $(this).addClass("active");
                 navLinks.classList.remove('active');
                 menuToggle.classList.add('active');
                 navMenu.classList.remove('active');
