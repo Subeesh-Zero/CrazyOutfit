@@ -98,10 +98,6 @@
             }
         }
 
-        .menu-toggle, .selected-sheet {
-            display: none;
-        }
-
         .nav-links {
             display: block;
             position: static;
@@ -178,7 +174,7 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
             opacity: 0;
             z-index: 1003;
-            will-change: translate;
+            will-change: width, opacity;
         }
 
         .search-bar.active {
@@ -187,7 +183,7 @@
         }
 
         .search-bar input {
-            flex-grow: 1;
+            flex: 1;
             height: 100%;
             border: none;
             outline: none;
@@ -216,7 +212,7 @@
 
         .search-bar .close-btn:hover {
             background: #ff5252;
-            transform: rotate(-90deg);
+            transform: rotate(90deg);
         }
 
         .search-bar .close-btn i {
@@ -256,12 +252,31 @@
         }
 
         .hero-section {
-            background: url('https://lh3.googleusercontent.com/d/15YPjZ-WCOvD8fIgbgoyqJPaRFbqGXkKh');
-            background-size: cover;
-            background-position: center;
-            height: 50vh;
+            position: relative;
+            width: 100%;
+            height: clamp(40vh, 45vw, 50vh);
             margin-top: 60px;
             margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .hero-section img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+        }
+
+        .hero-section::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 1;
         }
 
         #products {
@@ -445,7 +460,7 @@
             }
 
             .hero-section {
-                height: 55vh;
+                height: clamp(45vh, 50vw, 55vh);
                 margin-top: 65px;
             }
 
@@ -544,7 +559,7 @@
             }
 
             .hero-section {
-                height: 60vh;
+                height: clamp(50vh, 55vw, 60vh);
                 margin-top: 70px;
             }
 
@@ -566,10 +581,49 @@
             #product-list {
                 max-width: 1200px;
                 margin: auto;
+                display: block;
             }
 
             .product-item {
-                flex: 0 0 calc(33.33% - 15px);
+                width: calc(33.33% - 10px);
+                margin: 0 5px;
+            }
+
+            .carousel-inner {
+                display: flex;
+                flex-wrap: nowrap;
+            }
+
+            .carousel-item {
+                display: flex;
+                flex: 0 0 100%;
+                justify-content: center;
+            }
+
+            .carousel-control-prev, .carousel-control-next {
+                background: rgba(0, 123, 255, 0.5);
+                width: 40px;
+                height: 40px;
+                top: 50%;
+                transform: translateY(-50%);
+                border-radius: 50%;
+            }
+
+            .carousel-control-prev-icon, .carousel-control-next-icon {
+                background-color: #007bff;
+                width: 20px;
+                height: 20px;
+            }
+
+            .carousel-indicators {
+                bottom: -40px;
+            }
+
+            .carousel-indicators [data-bs-target] {
+                background-color: #007bff;
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
             }
 
             .product-card img {
@@ -582,10 +636,17 @@
 
             .product-card .card-title {
                 font-size: 1.2rem;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
 
             .product-card .card-text {
                 font-size: 1rem;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
             }
 
             .product-card .price {
@@ -635,7 +696,9 @@
             </div>
         </nav>
     </header>
-    <section class="hero-section"></section>
+    <section class="hero-section">
+        <img src="https://lh3.googleusercontent.com/d/15YPjZ-WCOvD8fIgbgoyqJPaRFbqGXkKh" alt="Hero Banner" loading="lazy">
+    </section>
     <section id="products" class="container my-4">
         <h2 class="text-center mb-4"><span class="highlight-title">Welcome</span></h2>
         <div id="product-list"></div>
@@ -673,7 +736,7 @@
         const navMenu = document.getElementById('navMenu');
         const navLinks = document.getElementById('navLinks');
 
-        // Debounce function to limit rapid toggling
+        // Debounce function
         function debounce(func, wait) {
             let timeout;
             return function executedFunction(...args) {
@@ -686,7 +749,7 @@
             };
         }
 
-        // Function to toggle search bar
+        // Toggle search bar
         const toggleSearchBar = debounce((e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -701,7 +764,7 @@
             }
         }, 150);
 
-        // Function to toggle menu
+        // Toggle menu
         function toggleNavMenu(e) {
             e.preventDefault();
             e.stopPropagation();
@@ -716,22 +779,17 @@
             }
         }
 
-        // Add click and touchstart events for search icon
+        // Event listeners
         searchIcon.addEventListener('click', toggleSearchBar);
         searchIcon.addEventListener('touchstart', toggleSearchBar);
-
-        // Add click and touchstart events for hamburger
         hamburger.addEventListener('click', toggleNavMenu);
         hamburger.addEventListener('touchstart', toggleNavMenu);
-
-        // Close search bar
         closeSearch.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
             searchBar.classList.remove('active');
             searchInput.blur();
         });
-
         closeSearch.addEventListener('touchstart', (e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -739,7 +797,7 @@
             searchInput.blur();
         });
 
-        // Close search and menu when clicking outside
+        // Close on outside click
         document.addEventListener('click', (e) => {
             if (!searchBar.contains(e.target) && !searchIcon.contains(e.target) && searchBar.classList.contains('active')) {
                 searchBar.classList.remove('active');
@@ -803,24 +861,69 @@
                     </div>
                 `);
             } else {
-                products.forEach(product => {
-                    const description = product.description || 'No description available';
-                    const shortDesc = description.split(' ').slice(0, 20).join(' ') + (description.split(' ').length > 20 ? '...' : '');
-                    const title = product.title.split(' ').slice(0, 70).join(' ') + (product.title.split(' ').length > 70 ? '...' : '');
+                if (window.innerWidth >= 992) {
+                    // PC view: 3-card slideshow
+                    let slides = [];
+                    for (let i = 0; i < products.length; i += 3) {
+                        slides.push(products.slice(i, i + 3));
+                    }
                     productList.append(`
-                        <div class="product-item">
-                            <div class="card product-card">
-                                <img src="${product.images[0] || 'https://via.placeholder.com/300'}" class="card-img-top">
-                                <div class="card-body">
-                                    <h5 class="card-title">${title}</h5>
-                                    <p class="card-text">${shortDesc}</p>
-                                    <p class="price">${product.price}:Rs</p>
-                                    <button class="view-product-btn" onclick="openProduct('${sheetName}', ${product.id})">View Product</button>
-                                </div>
+                        <div id="productCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+                            <div class="carousel-indicators">
+                                ${slides.map((_, index) => `
+                                    <button type="button" data-bs-target="#productCarousel" data-bs-slide-to="${index}" ${index === 0 ? 'class="active"' : ''}></button>
+                                `).join('')}
                             </div>
+                            <div class="carousel-inner">
+                                ${slides.map((slide, index) => `
+                                    <div class="carousel-item ${index === 0 ? 'active' : ''}">
+                                        ${slide.map(product => `
+                                            <div class="product-item">
+                                                <div class="card product-card">
+                                                    <img src="${product.images[0] || 'https://via.placeholder.com/300'}" class="card-img-top">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">${product.title.split(' ').slice(0, 70).join(' ') + (product.title.split(' ').length > 70 ? '...' : '')}</h5>
+                                                        <p class="card-text">${(product.description || 'No description available').split(' ').slice(0, 20).join(' ') + ((product.description || '').split(' ').length > 20 ? '...' : '')}</p>
+                                                        <p class="price">${product.price}:Rs</p>
+                                                        <button class="view-product-btn" onclick="openProduct('${sheetName}', ${product.id})">View Product</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                `).join('')}
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
                         </div>
                     `);
-                });
+                } else {
+                    // Mobile/Tablet view: Static grid
+                    products.forEach(product => {
+                        const description = product.description || 'No description available';
+                        const shortDesc = description.split(' ').slice(0, 20).join(' ') + (description.split(' ').length > 20 ? '...' : '');
+                        const title = product.title.split(' ').slice(0, 70).join(' ') + (product.title.split(' ').length > 70 ? '...' : '');
+                        productList.append(`
+                            <div class="product-item">
+                                <div class="card product-card">
+                                    <img src="${product.images[0] || 'https://via.placeholder.com/300'}" class="card-img-top">
+                                    <div class="card-body">
+                                        <h5 class="card-title">${title}</h5>
+                                        <p class="card-text">${shortDesc}</p>
+                                        <p class="price">${product.price}:Rs</p>
+                                        <button class="view-product-btn" onclick="openProduct('${sheetName}', ${product.id})">View Product</button>
+                                    </div>
+                                </div>
+                            </div>
+                        `);
+                    });
+                }
             }
         }
 
@@ -865,6 +968,10 @@
                 hamburger.classList.remove('active');
             });
             $("#search").on("input", searchProducts);
+            // Re-render products on window resize to switch between carousel and grid
+            $(window).on('resize', () => {
+                renderProducts(allProducts.slice(0, visibleProducts), currentSheet);
+            });
         });
     </script>
 </body>
