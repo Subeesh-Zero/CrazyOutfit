@@ -164,6 +164,7 @@
             top: 70px;
             right: 10px;
             width: 0;
+            max-width: calc(100% - 20px);
             height: 40px;
             background: #ffffff;
             border-radius: 20px;
@@ -258,6 +259,7 @@
             margin-top: 60px;
             margin-bottom: 30px;
             overflow: hidden;
+            aspect-ratio: 16/9;
         }
 
         .hero-section img {
@@ -357,6 +359,7 @@
 
         .product-item {
             flex: 0 0 calc(50% - 7.5px);
+            min-width: 160px;
             margin-bottom: 15px;
         }
 
@@ -779,18 +782,17 @@
             }
         }
 
-        // Event listeners
-        searchIcon.addEventListener('click', toggleSearchBar);
-        searchIcon.addEventListener('touchstart', toggleSearchBar);
-        hamburger.addEventListener('click', toggleNavMenu);
-        hamburger.addEventListener('touchstart', toggleNavMenu);
-        closeSearch.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            searchBar.classList.remove('active');
-            searchInput.blur();
-        });
-        closeSearch.addEventListener('touchstart', (e) => {
+        // Unified event handler
+        function addPointerEvents(element, handler) {
+            element.addEventListener('pointerdown', (e) => {
+                e.preventDefault();
+                handler(e);
+            });
+        }
+
+        addPointerEvents(searchIcon, toggleSearchBar);
+        addPointerEvents(hamburger, toggleNavMenu);
+        addPointerEvents(closeSearch, (e) => {
             e.preventDefault();
             e.stopPropagation();
             searchBar.classList.remove('active');
@@ -798,18 +800,7 @@
         });
 
         // Close on outside click
-        document.addEventListener('click', (e) => {
-            if (!searchBar.contains(e.target) && !searchIcon.contains(e.target) && searchBar.classList.contains('active')) {
-                searchBar.classList.remove('active');
-                searchInput.blur();
-            }
-            if (!navMenu.contains(e.target) && !hamburger.contains(e.target) && navMenu.classList.contains('active')) {
-                navMenu.classList.remove('active');
-                hamburger.classList.remove('active');
-            }
-        });
-
-        document.addEventListener('touchstart', (e) => {
+        document.addEventListener('pointerdown', (e) => {
             if (!searchBar.contains(e.target) && !searchIcon.contains(e.target) && searchBar.classList.contains('active')) {
                 searchBar.classList.remove('active');
                 searchInput.blur();
@@ -880,7 +871,7 @@
                                         ${slide.map(product => `
                                             <div class="product-item">
                                                 <div class="card product-card">
-                                                    <img src="${product.images[0] || 'https://via.placeholder.com/300'}" class="card-img-top">
+                                                    <img src="${product.images[0] || 'https://via.placeholder.com/300'}" class="card-img-top" loading="lazy">
                                                     <div class="card-body">
                                                         <h5 class="card-title">${product.title.split(' ').slice(0, 70).join(' ') + (product.title.split(' ').length > 70 ? '...' : '')}</h5>
                                                         <p class="card-text">${(product.description || 'No description available').split(' ').slice(0, 20).join(' ') + ((product.description || '').split(' ').length > 20 ? '...' : '')}</p>
@@ -903,6 +894,14 @@
                             </button>
                         </div>
                     `);
+                    // Initialize carousel
+                    const carouselElement = document.getElementById('productCarousel');
+                    if (carouselElement) {
+                        new bootstrap.Carousel(carouselElement, {
+                            interval: 3000,
+                            wrap: true
+                        });
+                    }
                 } else {
                     // Mobile/Tablet view: Static grid
                     products.forEach(product => {
@@ -912,7 +911,7 @@
                         productList.append(`
                             <div class="product-item">
                                 <div class="card product-card">
-                                    <img src="${product.images[0] || 'https://via.placeholder.com/300'}" class="card-img-top">
+                                    <img src="${product.images[0] || 'https://via.placeholder.com/300'}" class="card-img-top" loading="lazy">
                                     <div class="card-body">
                                         <h5 class="card-title">${title}</h5>
                                         <p class="card-text">${shortDesc}</p>
@@ -927,7 +926,7 @@
             }
         }
 
-        function searchProducts() {
+        const debouncedSearchProducts = debounce(function() {
             let searchVal = $("#search").val().toLowerCase();
             let filteredProducts = allProducts.filter(product => 
                 product.title.toLowerCase().includes(searchVal) || 
@@ -935,7 +934,7 @@
             );
             renderProducts(filteredProducts.slice(0, visibleProducts), currentSheet);
             toggleLoadMoreButton(filteredProducts.length);
-        }
+        }, 300);
 
         function openProduct(sheetName, productId) {
             window.location.href = `product.html?sheet=${sheetName}&id=${productId}`;
@@ -961,17 +960,17 @@
                 e.preventDefault();
                 e.stopPropagation();
                 currentSheet = $(this).data("sheet");
+                visibleProducts = 12; // Reset visible products on sheet change
                 fetchProducts(currentSheet);
                 $(".nav-links a").removeClass("active");
                 $(this).addClass("active");
                 navMenu.classList.remove('active');
                 hamburger.classList.remove('active');
             });
-            $("#search").on("input", searchProducts);
-            // Re-render products on window resize to switch between carousel and grid
-            $(window).on('resize', () => {
+            $("#search").on("input", debouncedSearchProducts);
+            $(window).on('resize', debounce(() => {
                 renderProducts(allProducts.slice(0, visibleProducts), currentSheet);
-            });
+            }, 200));
         });
     </script>
 </body>
