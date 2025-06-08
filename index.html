@@ -674,16 +674,14 @@
             <div class="logo">
                 <h1>Crazy<span>Outfit</span></h1>
             </div>
-            
             <div class="nav-menu" id="navMenu">
                 <ul class="nav-links" id="navLinks">
                     <!-- Dynamically populated by JavaScript -->
                 </ul>
             </div>
-            
             <div class="search-container">
                 <div class="search-bar" id="searchBar">
-                    <input type="text" placeholder="Search..." id="search">
+                    <input type="text" placeholder="Search..." id="searchInput">
                     <div class="close-btn" id="closeSearch">
                         <i class="fas fa-times"></i>
                     </div>
@@ -730,25 +728,23 @@
         let allProducts = [];
         let visibleProducts = 12;
         let currentSheet = "";
+        let lastSearchFilter = "";
+        let filteredProducts = [];
 
-        const searchIcon = document.getElementById('searchIcon');
-        const searchBar = document.getElementById('searchBar');
-        const closeSearch = document.getElementById('closeSearch');
-        const searchInput = document.getElementById('search');
-        const hamburger = document.getElementById('hamburger');
-        const navMenu = document.getElementById('navMenu');
-        const navLinks = document.getElementById('navLinks');
+        const searchIcon = document.querySelector('#searchIcon');
+        const searchBar = document.querySelector('#searchBar');
+        const closeSearch = document.querySelector('#closeSearch');
+        const searchInput = document.querySelector('#searchInput');
+        const hamburger = document.querySelector('#hamburger');
+        const navMenu = document.querySelector('#navMenu');
+        const navLinks = document.querySelector('#navLinks');
 
         // Debounce function
-        function debounce(func, wait) {
+        function debounce(func, delay) {
             let timeout;
-            return function executedFunction(...args) {
-                const later = () => {
-                    clearTimeout(timeout);
-                    func(...args);
-                };
+            return function(...args) {
                 clearTimeout(timeout);
-                timeout = setTimeout(later, wait);
+                timeout = setTimeout(() => func(...args), delay);
             };
         }
 
@@ -767,7 +763,7 @@
             }
         }, 150);
 
-        // Toggle menu
+        // Toggle hamburger menu
         function toggleNavMenu(e) {
             e.preventDefault();
             e.stopPropagation();
@@ -782,29 +778,26 @@
             }
         }
 
-        // Unified event handler
-        function addPointerEvents(element, handler) {
-            element.addEventListener('pointerdown', (e) => {
+        // Add click events
+        function addClickEvents(element, handler) {
+            element.addEventListener('click', (e) => {
                 e.preventDefault();
                 handler(e);
             });
         }
 
-        addPointerEvents(searchIcon, toggleSearchBar);
-        addPointerEvents(hamburger, toggleNavMenu);
-        addPointerEvents(closeSearch, (e) => {
+        addClickEvents(searchIcon, toggleSearchBar);
+        addClickEvents(hamburger, toggleNavMenu);
+        addClickEvents(closeSearch, (e) => {
             e.preventDefault();
-            e.stopPropagation();
             searchBar.classList.remove('active');
+            searchInput.value = '';
             searchInput.blur();
+            searchProducts();
         });
 
-        // Close on outside click
-        document.addEventListener('pointerdown', (e) => {
-            if (!searchBar.contains(e.target) && !searchIcon.contains(e.target) && searchBar.classList.contains('active')) {
-                searchBar.classList.remove('active');
-                searchInput.blur();
-            }
+        // Close nav menu on outside click
+        document.addEventListener('click', (e) => {
             if (!navMenu.contains(e.target) && !hamburger.contains(e.target) && navMenu.classList.contains('active')) {
                 navMenu.classList.remove('active');
                 hamburger.classList.remove('active');
@@ -815,16 +808,14 @@
             fetch(`${API_URL}?action=getSheets`)
                 .then(response => response.json())
                 .then(sheets => {
-                    let sheetNav = $("#navLinks");
+                    const sheetNav = $('#navLinks');
                     sheetNav.empty();
                     sheets.forEach(sheet => {
-                        sheetNav.append(`
-                            <li><a href="#" data-sheet="${sheet}">${sheet}</a></li>
-                        `);
+                        sheetNav.append(`<li><a href="#" data-sheet="${sheet}">${sheet}</a></li>`);
                     });
                     currentSheet = sheets[0] || 'Home';
                     fetchProducts(currentSheet);
-                    $("#navLinks a").first().addClass("active");
+                    $('#navLinks a').first().addClass('active');
                 });
         }
 
@@ -833,18 +824,21 @@
                 .then(response => response.json())
                 .then(products => {
                     allProducts = products;
+                    filteredProducts = products;
+                    lastSearchFilter = '';
+                    searchInput.value = '';
                     renderProducts(products.slice(0, visibleProducts), sheetName);
-                    $(".loading-overlay").hide();
+                    $('.loading-overlay').hide();
                     toggleLoadMoreButton(products.length);
                 })
                 .catch(error => {
-                    console.error("Error fetching products:", error);
-                    $(".loading-overlay").hide();
+                    console.error('Error fetching products:', error);
+                    $('.loading-overlay').hide();
                 });
         }
 
         function renderProducts(products, sheetName) {
-            let productList = $("#product-list").empty();
+            const productList = $('#product-list').empty();
             if (products.length === 0) {
                 productList.append(`
                     <div class="no-products">
@@ -854,7 +848,7 @@
             } else {
                 if (window.innerWidth >= 992) {
                     // PC view: 3-card slideshow
-                    let slides = [];
+                    const slides = [];
                     for (let i = 0; i < products.length; i += 3) {
                         slides.push(products.slice(i, i + 3));
                     }
@@ -875,7 +869,7 @@
                                                     <div class="card-body">
                                                         <h5 class="card-title">${product.title.split(' ').slice(0, 70).join(' ') + (product.title.split(' ').length > 70 ? '...' : '')}</h5>
                                                         <p class="card-text">${(product.description || 'No description available').split(' ').slice(0, 20).join(' ') + ((product.description || '').split(' ').length > 20 ? '...' : '')}</p>
-                                                        <p class="price">${product.price}:Rs</p>
+                                                        <p class="price">Rs ${product.price || 'N/A'}</p>
                                                         <button class="view-product-btn" onclick="openProduct('${sheetName}', ${product.id})">View Product</button>
                                                     </div>
                                                 </div>
@@ -894,16 +888,18 @@
                             </button>
                         </div>
                     `);
-                    // Initialize carousel
+                    // Dispose and reinitialize carousel
                     const carouselElement = document.getElementById('productCarousel');
                     if (carouselElement) {
+                        const existingCarousel = bootstrap.Carousel.getInstance(carouselElement);
+                        if (existingCarousel) existingCarousel.dispose();
                         new bootstrap.Carousel(carouselElement, {
                             interval: 3000,
                             wrap: true
                         });
                     }
                 } else {
-                    // Mobile/Tablet view: Static grid
+                    // Mobile/Tablet view: static grid
                     products.forEach(product => {
                         const description = product.description || 'No description available';
                         const shortDesc = description.split(' ').slice(0, 20).join(' ') + (description.split(' ').length > 20 ? '...' : '');
@@ -915,7 +911,7 @@
                                     <div class="card-body">
                                         <h5 class="card-title">${title}</h5>
                                         <p class="card-text">${shortDesc}</p>
-                                        <p class="price">${product.price}:Rs</p>
+                                        <p class="price">Rs ${product.price || 'N/A'}</p>
                                         <button class="view-product-btn" onclick="openProduct('${sheetName}', ${product.id})">View Product</button>
                                     </div>
                                 </div>
@@ -926,50 +922,69 @@
             }
         }
 
-        const debouncedSearchProducts = debounce(function() {
-            let searchVal = $("#search").val().toLowerCase();
-            let filteredProducts = allProducts.filter(product => 
-                product.title.toLowerCase().includes(searchVal) || 
-                (product.keywords && product.keywords.toLowerCase().includes(searchVal))
-            );
-            renderProducts(filteredProducts.slice(0, visibleProducts), currentSheet);
-            toggleLoadMoreButton(filteredProducts.length);
-        }, 300);
+        function searchProducts() {
+            try {
+                const searchVal = $('#searchInput').val().trim().toLowerCase();
+                if (searchVal === lastSearchFilter) return;
+                lastSearchFilter = searchVal;
+
+                if (searchVal === '') {
+                    filteredProducts = allProducts;
+                } else {
+                    filteredProducts = allProducts.filter(product => {
+                        const title = (product.title || '').toLowerCase();
+                        const keywords = (product.keywords || '').toLowerCase();
+                        return title.includes(searchVal) || keywords.includes(searchVal);
+                    });
+                }
+
+                visibleProducts = 12;
+                renderProducts(filteredProducts.slice(0, visibleProducts), currentSheet);
+                toggleLoadMoreButton(filteredProducts.length);
+            } catch (error) {
+                console.error('Search error:', error);
+                renderProducts([], currentSheet);
+            }
+        }
+
+        const debouncedSearchProducts = debounce(searchProducts, 300);
 
         function openProduct(sheetName, productId) {
             window.location.href = `product.html?sheet=${sheetName}&id=${productId}`;
         }
 
-        $("#load-more-btn").click(() => {
+        $('#load-more-btn').on('click', () => {
             visibleProducts += 12;
-            renderProducts(allProducts.slice(0, visibleProducts), currentSheet);
-            toggleLoadMoreButton(allProducts.length);
+            renderProducts(filteredProducts.slice(0, visibleProducts), currentSheet);
+            toggleLoadMoreButton(filteredProducts.length);
         });
 
         function toggleLoadMoreButton(totalProducts) {
             if (visibleProducts >= totalProducts) {
-                $("#load-more-btn").hide();
+                $('#load-more-btn').hide();
             } else {
-                $("#load-more-btn").show();
+                $('#load-more-btn').show();
             }
         }
 
         $(document).ready(() => {
             fetchSheets();
-            $(document).on("click", ".nav-links a", function(e) {
+            $(document).on('click', '.nav-links a', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                currentSheet = $(this).data("sheet");
-                visibleProducts = 12; // Reset visible products on sheet change
+                currentSheet = $(this).data('sheet');
+                visibleProducts = 12;
+                lastSearchFilter = '';
+                searchInput.value = '';
                 fetchProducts(currentSheet);
-                $(".nav-links a").removeClass("active");
-                $(this).addClass("active");
+                $('.nav-links a').removeClass('active');
+                $(this).addClass('active');
                 navMenu.classList.remove('active');
                 hamburger.classList.remove('active');
             });
-            $("#search").on("input", debouncedSearchProducts);
+            $('#searchInput').on('input', debouncedSearchProducts);
             $(window).on('resize', debounce(() => {
-                renderProducts(allProducts.slice(0, visibleProducts), currentSheet);
+                renderProducts(filteredProducts.slice(0, visibleProducts), currentSheet);
             }, 200));
         });
     </script>
