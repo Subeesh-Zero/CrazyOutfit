@@ -23,7 +23,6 @@
             overflow-x: hidden;
         }
 
-        /* Mobile-First Styles */
         header {
             background: rgba(255, 255, 255, 0.95);
             position: fixed;
@@ -125,7 +124,9 @@
 
         .nav-links a:hover, .nav-links a.active {
             color: #007bff;
-            background: rgba(0, 123, 255, 0.05);
+            background: #e6f0ff;
+            border-radius: 6px;
+            background-image: linear-gradient(to right, #e6f0ff, #f0f8ff);
         }
 
         .search-container {
@@ -460,14 +461,13 @@
             border-radius: 4px;
         }
 
-        /* Tablet (576px and up) */
         @media (min-width: 576px) {
             .navbar {
-                padding: 65px 20px;
+                padding: 12px 20px;
             }
 
             .logo h1 {
-                font-size: clamp(1.6rem, 4vw, 18px);
+                font-size: clamp(1.6rem, 4vw, 1.8rem);
             }
 
             .hero-section {
@@ -501,7 +501,6 @@
             }
         }
 
-        /* Desktop (768px and up) */
         @media (min-width: 768px) {
             .navbar {
                 padding: 15px 30px;
@@ -553,7 +552,6 @@
             }
         }
 
-        /* Large Desktop (992px and up) */
         @media (min-width: 992px) {
             .navbar {
                 max-width: 1400px;
@@ -699,7 +697,7 @@
         }, 150);
 
         // Toggle hamburger menu
-        function toggleNavMenu(e) {
+        function toggleNav(e) {
             e.preventDefault();
             e.stopPropagation();
             if (!navMenu.classList.contains('active')) {
@@ -714,16 +712,16 @@
         }
 
         // Add click events
-        function addClickEvents(element, handler) {
+        function addClick(element, handler) {
             element.addEventListener('click', (e) => {
                 e.preventDefault();
                 handler(e);
             });
         }
 
-        addClickEvents(searchIcon, toggleSearchBar);
-        addClickEvents(hamburger, toggleNavMenu);
-        addClickEvents(closeSearch, (e) => {
+        addClick(searchIcon, toggleSearchBar);
+        addClick(hamburger, toggleNav);
+        addClick(closeSearch, (e) => {
             e.preventDefault();
             searchBar.classList.remove('active');
             searchInput.value = '';
@@ -784,11 +782,11 @@
                 products.forEach(product => {
                     const description = product.description || 'No description available';
                     const shortDesc = description.split(' ').slice(0, 20).join(' ') + (description.split(' ').length > 20 ? '...' : '');
-                    const title = product.title.split(' ').slice(0, 70).join(' ') + (product.title.split(' ').length > 70 ? '...' : '');
+                    const title = product.title || 'No title available';
                     productList.append(`
                         <div class="product-item">
                             <div class="card product-card">
-                                <img src="${product.images[0] || 'https://via.placeholder.com/300'}" class="card-img-top" loading="lazy">
+                                <img src="${product.images && product.images[0] ? product.images[0] : 'https://via.placeholder.com/300'}" class="card-img-top" loading="lazy">
                                 <div class="card-body">
                                     <h5 class="product-title">${title}</h5>
                                     <p class="card-text">${shortDesc}</p>
@@ -821,23 +819,17 @@
                 visibleProducts = 12;
                 renderProducts(filteredProducts.slice(0, visibleProducts), currentSheet);
                 toggleLoadMoreButton(filteredProducts.length);
-            } catch (error) {
-                console.error('Error filtering products:', error);
+            } catch (e) {
+                console.error('Error filtering products:', e);
                 renderProducts([]);
             }
         }
 
-        const debouncedSearchProducts = debounce(searchProducts, 300);
+        const debouncedSearch = debounce(searchProducts, 300);
 
         function openProduct(sheetName, productId) {
             window.location.href = `product.html?sheet=${sheetName}&id=${productId}`;
         }
-
-        $('#load-more-btn').on('click', () => {
-            visibleProducts += 12;
-            renderProducts(filteredProducts.slice(0, visibleProducts), currentSheet);
-            toggleLoadMoreButton(filteredProducts.length);
-        });
 
         function toggleLoadMoreButton(totalProducts) {
             if (visibleProducts >= totalProducts) {
@@ -851,7 +843,7 @@
             fetchSheets();
             $(document).on('click', '.nav-links a', function(e) {
                 e.preventDefault();
-                e.stopPropagation();
+                $('.loading-overlay').show();
                 currentSheet = $(this).data('sheet');
                 visibleProducts = 12;
                 lastSearchFilter = '';
@@ -862,7 +854,7 @@
                 navMenu.classList.remove('active');
                 hamburger.classList.remove('active');
             });
-            $('#searchInput').on('input', debouncedSearchProducts);
+            $('#searchInput').on('input', debouncedSearch);
             $(window).on('resize', debounce(() => {
                 renderProducts(filteredProducts.slice(0, visibleProducts), currentSheet);
             }, 200));
